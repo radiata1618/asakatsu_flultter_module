@@ -71,6 +71,8 @@ class SetAlarmTimeProvider extends ChangeNotifier {
           id: _alarmId,
           nextDateTime: calcAlarmNextDateTimeUnit(_alarmTime, alarmPattern!));
     }
+
+    await calcAndWriteNextTimeOnTextFile();
   }
 
   void rebuildScreen() {

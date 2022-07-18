@@ -25,7 +25,13 @@ class ViewAlarmTimePattern extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: commonAppTabBar(),
-      body: alarmPatternList( context,  ref),
+      body: Column(
+          mainAxisAlignment:MainAxisAlignment.start,
+        children: [
+          headerInfo(context, ref),
+          Expanded(child: alarmPatternList( context,  ref)),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async{
           ref.read(addNewAlarmPatternTimeProvider.notifier).initialize();
@@ -40,6 +46,21 @@ class ViewAlarmTimePattern extends ConsumerWidget {
     );
   }
 
+  Widget headerInfo(BuildContext context, WidgetRef ref){
+    return FutureBuilder(
+      future: loadFile(),
+      builder:
+          (BuildContext context, AsyncSnapshot<String> text) {
+        if (text.connectionState != ConnectionState.done) {
+          return  const Center(child: CircularProgressIndicator());
+        } else if (text.hasData&&text.data!.isNotEmpty) {
+          return Container(child:commonText16BlackLeft(text.data!));
+        } else {
+          return Container(child:commonText16BlackLeft("no scheduled"));
+        }
+      },
+    );
+  }
   Widget alarmPatternList(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
       future: selectIsarAllAlarmPattern(),
@@ -171,4 +192,9 @@ Widget daysOfWeekButtonTopPage(String dayName, String dayDisplay, WidgetRef ref,
         ),
         const SizedBox(width:6)
       ]);
+}
+
+Future<String> loadFile() async {
+  final file = await getFilePath();
+  return file.readAsString();
 }

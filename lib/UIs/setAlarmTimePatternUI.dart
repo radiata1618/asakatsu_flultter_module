@@ -1,6 +1,7 @@
 import 'package:asakatsu_flultter_module/UIs/setAlarmTimePatternProvider.dart';
 import 'package:asakatsu_flultter_module/UIs/setAlarmTimeProvider.dart';
 import 'package:asakatsu_flultter_module/UIs/setAlarmTimeUI.dart';
+import 'package:asakatsu_flultter_module/daoIsar/alarmPatternDaoIsar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -85,7 +86,17 @@ class SetAlarmTimePattern extends ConsumerWidget {
               rowOfdaysOfWeekButton(ref),
               commonVerticalGap(),
               const SizedBox(height:30,child: Text("Add alarm time")),
-              commonButtonSecondaryColorRound(text: "Save", onPressed: () {
+              commonButtonSecondaryColorRound(text: "Save", onPressed: () async{
+                await updateIsarAlarmPattern(
+                    id: ref.watch(setAlarmTimePatternProvider).patternId,
+                    patternName: ref.watch(setAlarmTimePatternProvider).patternName,
+                    monday: ref.watch(setAlarmTimePatternProvider).monday,
+                    tuesday: ref.watch(setAlarmTimePatternProvider).tuesday,
+                    wednesday: ref.watch(setAlarmTimePatternProvider).wednesday,
+                    thursday: ref.watch(setAlarmTimePatternProvider).thursday,
+                    friday: ref.watch(setAlarmTimePatternProvider).friday,
+                    saturday: ref.watch(setAlarmTimePatternProvider).saturday,
+                    sunday: ref.watch(setAlarmTimePatternProvider).sunday);
                 Navigator.pop(context);
               })
             ],
