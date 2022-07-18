@@ -1,13 +1,12 @@
-
 import '../../daoIsar/alarmDaoIsar.dart';
 import '../../daoIsar/alarmPatternDaoIsar.dart';
 import '../../entityIsar/alarmEntityIsar.dart';
 import '../../entityIsar/alarmPatternEntityIsar.dart';
+import '../commonValues.dart';
 
 Future<void> refleshAlarmNextDateTimeByPatternId(int patternId)async{
   AlarmPattern? alarmPattern=await selectIsarAlarmPattern(patternId);
   List<Alarm> alarmList = await selectIsarAlarmByPatternId(patternId);
-
 
   for(int i=0;i<alarmList.length;i++){
     await updateIsarAlarm(id: alarmList[i].id!, patternId: alarmList[i].patternId, time: alarmList[i].time, valid: alarmList[i].valid, nextDateTime: calcAlarmNextDateTimeUnit(alarmList[i].time, alarmPattern!));
@@ -60,5 +59,9 @@ bool judgeDayOfWeekOnOff(DateTime dateTime, AlarmPattern alarmPattern){
     default:
       return alarmPattern.sunday;
   }
+}
 
+void setAlarmTimerKotlin(){
+
+  String response = platformForCallKotlin.invokeMethod('selectUsersByConditionsOnKotlin',conditionsList);
 }

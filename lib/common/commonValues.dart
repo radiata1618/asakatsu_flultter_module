@@ -6,7 +6,7 @@ import 'otherClass/commonHexColor.dart';
 const int searchConditionAgeMin = 12;
 const int searchConditionAgeMax = 100;
 
-const platformForCallKotlin = MethodChannel('app.com.convas/app');
+const platformForCallKotlin = MethodChannel('../asakatsu_android/app.com.asakatsu_android/app');
 
 const searchUsersImageLoadExtraNumber = 5;
 
