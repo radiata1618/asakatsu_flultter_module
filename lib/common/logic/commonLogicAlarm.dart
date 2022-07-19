@@ -100,3 +100,4 @@ Future<File> getFilePath() async {
   final directory = await getTemporaryDirectory();
   return File('${directory.path}/nextTimeInfo.txt');
 }
+

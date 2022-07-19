@@ -1,10 +1,17 @@
+import 'package:asakatsu_flultter_module/UIs/ringRootUI.dart';
 import 'package:asakatsu_flultter_module/UIs/rootProvider.dart';
 import 'package:asakatsu_flultter_module/UIs/viewAlarmTimePatternUI.dart';
+import 'package:asakatsu_flultter_module/common/UI/commonPushUI.dart';
+import 'package:asakatsu_flultter_module/daoIsar/alarmDaoIsar.dart';
+import 'package:asakatsu_flultter_module/daoIsar/alarmPatternDaoIsar.dart';
+import 'package:asakatsu_flultter_module/entityIsar/alarmPatternEntityIsar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:core';
 
 import '../common/commonValues.dart';
+import '../common/logic/commonLogicAlarm.dart';
+import '../entityIsar/alarmEntityIsar.dart';
 
 final _selectedIndexProvider = StateProvider.autoDispose((ref) {
   return 0;
@@ -21,6 +28,7 @@ class Root extends ConsumerWidget {
 
     ref.read(bottomNavigationBarItemsProvider.notifier).initialize(ref);
     final _selectedIndex = ref.watch(_selectedIndexProvider);
+    checkRingData(ref,context);
 
     return Scaffold(
       body: routeElement(
@@ -66,9 +74,32 @@ class Root extends ConsumerWidget {
         // case 3:
         //   return LessonListRoot();
         default:
-          return ViewAlarmTimePattern();
+          return const RingRoot();
       }
 
     // }
+  }
+
+
+  Future<void> checkRingData(WidgetRef ref, BuildContext context)async {
+
+    Alarm? alarmData = await selectIsarAlarmMostRecent();
+
+    if(alarmData!=null){
+      if(alarmData.nextDateTime!=null){
+        if(DateTime.now().isAfter(alarmData.nextDateTime!)){
+          //Alarm起動するときの処理
+
+          AlarmPattern? alarmPattern = await selectIsarAlarmPattern(alarmData.patternId);
+          await refleshAlarmNextDateTimeByPatternId(alarmPattern!.id!);
+          await calcAndWriteNextTimeOnTextFile();
+
+          await commonNavigatorPushSlideHorizon(context, const RingRoot());
+
+        }
+      }
+    }
+
+
   }
 }
