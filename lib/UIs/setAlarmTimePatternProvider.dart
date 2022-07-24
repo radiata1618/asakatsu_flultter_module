@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../common/logic/commonLogicAlarm.dart';
 import '../daoIsar/alarmPatternDaoIsar.dart';
 import '../entityIsar/alarmPatternEntityIsar.dart';
@@ -23,6 +21,8 @@ class SetAlarmTimePatternProvider extends ChangeNotifier {
   bool _saturday=false;
   bool _sunday=false;
   int _dummyVariableForRebuild=0;
+  DateTime? _goToBedTime;
+  bool _forceGoToBedEnable=false;
 
   int get patternId=>_patternId;
   String get patternName=>_patternName;
@@ -34,10 +34,17 @@ class SetAlarmTimePatternProvider extends ChangeNotifier {
   bool get saturday=>_saturday;
   bool get sunday=>_sunday;
   int get dummyVariableForRebuild=>_dummyVariableForRebuild;
+  DateTime? get goToBedTime=>_goToBedTime;
+  bool get forceGoToBedEnable=>_forceGoToBedEnable;
 
 
   setPatternName(String nameValue){
     _patternName=nameValue;
+  }
+
+
+  setGoToBedTime(DateTime? value){
+    _goToBedTime=value;
   }
 
   Future<void> initialize(int patternIdValue)async {
@@ -51,6 +58,9 @@ class SetAlarmTimePatternProvider extends ChangeNotifier {
     _friday=alarmPattern!.friday;
     _saturday=alarmPattern!.saturday;
     _sunday=alarmPattern!.sunday;
+    _goToBedTime=alarmPattern!.goToBedTime;
+
+
   }
 
   Future<void> setRepeats(String key)async {
@@ -77,10 +87,20 @@ class SetAlarmTimePatternProvider extends ChangeNotifier {
         _sunday=!_sunday;
         break;
     }
-    await updateIsarAlarmPattern(patternName: _patternName, monday: _monday, tuesday: _tuesday, wednesday: _wednesday, thursday: _thursday, friday: _friday, saturday: _saturday, sunday: _sunday, id: _patternId);
+    await updateIsarAlarmPatternCall();
+  }
+
+  Future<void> setForceGoToBedEnable()async {
+    _forceGoToBedEnable=!_forceGoToBedEnable;
+    await updateIsarAlarmPatternCall();
+  }
+
+  Future<void> updateIsarAlarmPatternCall()async {
+    await updateIsarAlarmPattern(patternName: _patternName, monday: _monday, tuesday: _tuesday, wednesday: _wednesday, thursday: _thursday, friday: _friday, saturday: _saturday, sunday: _sunday, id: _patternId,goToBedTime: _goToBedTime,forceGoToBedEnable:_forceGoToBedEnable);
     await refleshAlarmNextDateTimeByPatternId(_patternId);
     notifyListeners();
   }
+
   getRepeats(String key){
     switch(key){
       case "monday":

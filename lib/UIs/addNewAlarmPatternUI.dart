@@ -25,14 +25,33 @@ class AddNewAlarmPatternTime extends ConsumerWidget {
         Column(
           children: [
             commonText16BlackLeft("Add new alarm pattern"),
-            commonTextBoxBordered(text: 'Pattern name',onChanged: (String value)async{
-              ref.read(addNewAlarmPatternTimeProvider.notifier).setName(value);
-            }),
-            commonButtonSecondaryColorRound(text: "Save", onPressed: ()async{
-              int patternId = await insertIsarAlarmPattern(patternName: ref.watch(addNewAlarmPatternTimeProvider).patternName, monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false);
-              await ref.read(setAlarmTimePatternProvider.notifier).initialize(patternId);
-              Navigator.pop(context);
-            })
+            commonTextBoxBordered(
+                text: 'Pattern name',
+                onChanged: (String value) async {
+                  ref
+                      .read(addNewAlarmPatternTimeProvider.notifier)
+                      .setName(value);
+                }),
+            commonButtonSecondaryColorRound(
+                text: "Save",
+                onPressed: () async {
+                  int patternId = await insertIsarAlarmPattern(
+                      patternName:
+                          ref.watch(addNewAlarmPatternTimeProvider).patternName,
+                      monday: false,
+                      tuesday: false,
+                      wednesday: false,
+                      thursday: false,
+                      friday: false,
+                      saturday: false,
+                      sunday: false,
+                      goToBedTime: null,
+                      forceGoToBedEnable:false);
+                  await ref
+                      .read(setAlarmTimePatternProvider.notifier)
+                      .initialize(patternId);
+                  Navigator.pop(context);
+                })
           ],
         )
       ],

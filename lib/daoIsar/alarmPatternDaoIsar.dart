@@ -3,150 +3,143 @@ import '../entityIsar/alarmPatternEntityIsar.dart';
 import 'commonIsar.dart';
 
 Future<AlarmPattern?> selectIsarAlarmPattern(int id) async {
-
   var isarInstance = Isar.getInstance();
   AlarmPattern? resultAlarmPattern;
   await isarInstance?.writeTxn((isar) async {
-    List<AlarmPattern> resultList = await isar.alarmPatterns.filter().idEqualTo(id).findAll();
+    List<AlarmPattern> resultList =
+        await isar.alarmPatterns.filter().idEqualTo(id).findAll();
 
-    if(resultList.isEmpty){
+    if (resultList.isEmpty) {
       resultAlarmPattern = null;
-    }else{
+    } else {
       resultAlarmPattern = resultList[0];
     }
   });
   return resultAlarmPattern;
 }
 
-
 Future<List<AlarmPattern>> selectIsarAllAlarmPattern() async {
-
   await openIsarInstances();
   var isarInstance = Isar.getInstance();
-  List<AlarmPattern> resultListReturn=[];
+  List<AlarmPattern> resultListReturn = [];
   await isarInstance?.writeTxn((isar) async {
     List<AlarmPattern> resultList = await isar.alarmPatterns.where().findAll();
 
-    resultListReturn=resultList;
+    resultListReturn = resultList;
   });
   return resultListReturn;
 }
 
-Future<int> insertIsarAlarmPattern({
-  required String patternName,
-  required bool monday,
-  required bool tuesday,
-  required bool wednesday,
-  required bool thursday,
-  required bool friday,
-  required bool saturday,
-  required bool sunday
-}) async {
-
-  AlarmPattern insertAlarmPattern= AlarmPattern(
-    null,
-    patternName,
-    monday,
-    tuesday,
-    wednesday,
-    thursday,
-    friday,
-    saturday,
-    sunday,
-  );
+Future<int> insertIsarAlarmPattern(
+    {required String patternName,
+    required bool monday,
+    required bool tuesday,
+    required bool wednesday,
+    required bool thursday,
+    required bool friday,
+    required bool saturday,
+    required bool sunday,
+    required DateTime? goToBedTime,
+    required bool forceGoToBedEnable}) async {
+  AlarmPattern insertAlarmPattern = AlarmPattern(
+      null,
+      patternName,
+      monday,
+      tuesday,
+      wednesday,
+      thursday,
+      friday,
+      saturday,
+      sunday,
+      goToBedTime,
+      forceGoToBedEnable);
 
   var isarInstance = Isar.getInstance();
-  int returnResult=0;
+  int returnResult = 0;
 
   await isarInstance?.writeTxn((isar) async {
-    returnResult=  await isar.alarmPatterns.put(insertAlarmPattern);
+    returnResult = await isar.alarmPatterns.put(insertAlarmPattern);
   });
 
   return returnResult;
-
 }
 
-
-Future<int> updateIsarAlarmPattern({
-  required int id,
-  required String patternName,
-  required bool monday,
-  required bool tuesday,
-  required bool wednesday,
-  required bool thursday,
-  required bool friday,
-  required bool saturday,
-  required bool sunday
-}) async {
-
-  AlarmPattern updateAlarmPattern= AlarmPattern(
-    id,
-    patternName,
-    monday,
-    tuesday,
-    wednesday,
-    thursday,
-    friday,
-    saturday,
-    sunday,
-  );
+Future<int> updateIsarAlarmPattern(
+    {required int id,
+    required String patternName,
+    required bool monday,
+    required bool tuesday,
+    required bool wednesday,
+    required bool thursday,
+    required bool friday,
+    required bool saturday,
+    required bool sunday,
+    required DateTime? goToBedTime,
+    required bool forceGoToBedEnable}) async {
+  AlarmPattern updateAlarmPattern = AlarmPattern(
+      id,
+      patternName,
+      monday,
+      tuesday,
+      wednesday,
+      thursday,
+      friday,
+      saturday,
+      sunday,
+      goToBedTime,
+      forceGoToBedEnable);
 
   var isarInstance = Isar.getInstance();
-  int returnResult=0;
+  int returnResult = 0;
 
   await isarInstance?.writeTxn((isar) async {
-    returnResult=  await isar.alarmPatterns.put(updateAlarmPattern);
+    returnResult = await isar.alarmPatterns.put(updateAlarmPattern);
   });
 
   return returnResult;
-
 }
 
 Future<int> deleteIsarAlarmPattern(int id) async {
-
-  int returnInt=0;
+  int returnInt = 0;
   var isarInstance = Isar.getInstance();
   await isarInstance?.writeTxn((isar) async {
     returnInt = await isar.alarmPatterns.filter().idEqualTo(id).deleteAll();
   });
 
   return returnInt;
-
 }
 
-Future<int> updateIsarAlarmPatternDayOfWeek({
-  required AlarmPattern alarmPattern,
-  required String dayName
-}) async {
-  bool tmpMonday=alarmPattern.monday;
-  bool tmpTueday=alarmPattern.tuesday;
-  bool tmpWednesday=alarmPattern.wednesday;
-  bool tmpThursday=alarmPattern.thursday;
-  bool tmpFriday=alarmPattern.friday;
-  bool tmpSaturday=alarmPattern.saturday;
-  bool tmpSunday=alarmPattern.sunday;
+Future<int> updateIsarAlarmPatternDayOfWeek(
+    {required AlarmPattern alarmPattern, required String dayName}) async {
+  bool tmpMonday = alarmPattern.monday;
+  bool tmpTueday = alarmPattern.tuesday;
+  bool tmpWednesday = alarmPattern.wednesday;
+  bool tmpThursday = alarmPattern.thursday;
+  bool tmpFriday = alarmPattern.friday;
+  bool tmpSaturday = alarmPattern.saturday;
+  bool tmpSunday = alarmPattern.sunday;
 
-  switch(dayName){
+  switch (dayName) {
     case "monday":
-      tmpMonday =  !tmpMonday;
+      tmpMonday = !tmpMonday;
       break;
     case "tuesday":
-      tmpTueday =  !tmpTueday;
+      tmpTueday = !tmpTueday;
       break;
     case "wednesday":
-      tmpWednesday =  !tmpWednesday;
+      tmpWednesday = !tmpWednesday;
       break;
     case "thursday":
-      tmpThursday =  !tmpThursday;
+      tmpThursday = !tmpThursday;
       break;
     case "friday":
-      tmpFriday =  !tmpFriday;
+      tmpFriday = !tmpFriday;
       break;
     case "saturday":
-      tmpSaturday =  !tmpSaturday;
+      tmpSaturday = !tmpSaturday;
       break;
     case "sunday":
-      tmpSunday =  !tmpSunday;
+      tmpSunday = !tmpSunday;
       break;
   }
 
@@ -159,6 +152,7 @@ Future<int> updateIsarAlarmPatternDayOfWeek({
       thursday: tmpThursday,
       friday: tmpFriday,
       saturday: tmpSaturday,
-      sunday: tmpSunday);
-
+      sunday: tmpSunday,
+      goToBedTime: alarmPattern.goToBedTime,
+      forceGoToBedEnable:alarmPattern.forceGoToBedEnable);
 }

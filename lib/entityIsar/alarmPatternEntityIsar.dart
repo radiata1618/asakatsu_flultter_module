@@ -16,6 +16,8 @@ class AlarmPattern {
       this.friday,
       this.saturday,
       this.sunday,
+      this.goToBedTime,
+      this.forceGoToBedEnable
       );
 
   @Id()
@@ -28,5 +30,7 @@ class AlarmPattern {
   bool friday;
   bool saturday;
   bool sunday;
+  DateTime? goToBedTime;
+  bool forceGoToBedEnable;
 
 }
