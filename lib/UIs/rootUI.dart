@@ -27,43 +27,31 @@ class Root extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     ref.read(bottomNavigationBarItemsProvider.notifier).initialize(ref);
-    final _selectedIndex = ref.watch(_selectedIndexProvider);
+    final selectedIndex = ref.watch(_selectedIndexProvider);
     checkRingData(ref,context);
 
     return Scaffold(
       body: routeElement(
-          _selectedIndex,
+          selectedIndex,
           ref),
+
       bottomNavigationBar: BottomNavigationBar(
           selectedItemColor:commonColorSecondary,
-          type: BottomNavigationBarType.fixed, // これを書かないと3つまでしか表示されない
+          type: BottomNavigationBarType.fixed,
           items: ref.watch(bottomNavigationBarItemsProvider.notifier)
               .bottomNavigationBarItems,
-          currentIndex: _selectedIndex,
-          //selectedItemColor: Colors.black,
+          currentIndex: selectedIndex,
           onTap: (int index) {
             ref.read(bottomNavigationBarItemsProvider.notifier)
-                .activateButton(_selectedIndex, index);
+                .activateButton(selectedIndex, index);
             ref.read(_selectedIndexProvider.state).update((state) => index);
-          }),
+          })
     );
   }
 
   Widget routeElement(
       int selectedIndex, WidgetRef ref) {
 
-    // if(ref.watch(userDataProvider).userData["userType"]=="1"){
-    //   switch (selectedIndex) {
-    //     case 0:
-    //       return SearchUsersMainPage();
-    //     case 1:
-    //       return Talk();
-    //     case 2:
-    //       return LessonListRoot();
-    //     default:
-    //       return MyPage();
-    //   }
-    // }else{
       switch (selectedIndex) {
         case 0:
           return const ViewAlarmTimePattern();
