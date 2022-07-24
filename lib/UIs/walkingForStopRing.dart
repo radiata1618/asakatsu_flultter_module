@@ -1,4 +1,3 @@
-import 'package:asakatsu_flultter_module/common/UI/commonOthersUI.dart';
 import 'package:asakatsu_flultter_module/common/UI/commonTextUI.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +8,8 @@ import 'dart:math' as math;
 
 import '../common/UI/commonTextFormUI.dart';
 
-class CalcForStopRing extends ConsumerWidget {
-  const CalcForStopRing( {
+class WakingForStopRing extends ConsumerWidget {
+  const WakingForStopRing( {
     Key? key,
   }) : super(key: key);
 
@@ -27,22 +26,18 @@ class CalcForStopRing extends ConsumerWidget {
     vibe();
 
     return Scaffold(
-        body: SafeArea(
-          child: Column(
-      children: [
-        commonVerticalGap(),
-        commonVerticalGap(),
-          Expanded(
-              child: Container(
-                  color: Colors.black12, child: commonText16BlackLeft(calcStr))),
-          commonTextBoxBordered(text: 'answer',
-              onChanged: (String value) {
+        body: Column(
+          children: [
+            Expanded(
+                child: Container(
+                    color: Colors.black12, child: commonText16BlackLeft(calcStr))),
+            commonTextBoxBordered(text: 'answer',
+                onChanged: (String value) {
                   if(int.parse(value)==answer){
                     stopSoundsAndVibe(player);
                   }
-              }),
-      ],
-    ),
+                }),
+          ],
         ));
   }
 }

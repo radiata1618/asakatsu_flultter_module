@@ -41,6 +41,7 @@ dependencies:
 #  vibration: ^1.7.3
   vibration: ^1.7.4-nullsafety.0
   font_awesome_flutter: ^10.1.0
+  pedometer: ^3.0.0
 
 dev_dependencies:
   isar_generator: ^2.5.0

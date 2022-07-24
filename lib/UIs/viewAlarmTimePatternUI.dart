@@ -1,3 +1,4 @@
+import 'package:asakatsu_flultter_module/UIs/ringRootUI.dart';
 import 'package:asakatsu_flultter_module/UIs/setAlarmTimePatternProvider.dart';
 import 'package:asakatsu_flultter_module/UIs/setAlarmTimePatternUI.dart';
 import 'package:asakatsu_flultter_module/UIs/viewAlarmTimePatternProvider.dart';
@@ -12,6 +13,7 @@ import '../common/commonValues.dart';
 import '../common/logic/commonLogicAlarm.dart';
 import '../daoIsar/alarmDaoIsar.dart';
 import '../daoIsar/alarmPatternDaoIsar.dart';
+import '../entityIsar/alarmEntityIsar.dart';
 import '../entityIsar/alarmPatternEntityIsar.dart';
 import 'addNewAlarmPatternProvider.dart';
 import 'addNewAlarmPatternUI.dart';
@@ -23,6 +25,9 @@ class ViewAlarmTimePattern extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    checkRingData(ref,context);
+
     return Scaffold(
       appBar: commonAppTabBar(),
       body: Column(
@@ -44,6 +49,30 @@ class ViewAlarmTimePattern extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Future<void> checkRingData(WidgetRef ref, BuildContext context)async {
+
+    Alarm? alarmData = await selectIsarAlarmMostRecent();
+
+    await commonShowOkInfoDialog(context, "Log", "NextTime:"+(alarmData==null?"NULL":alarmData!.nextDateTime!.toString()));
+    if(alarmData!=null){
+      await commonShowOkInfoDialog(context, "Log", "step2");
+      if(alarmData.nextDateTime!=null){
+        await commonShowOkInfoDialog(context, "Log", "step3");
+        if(DateTime.now().isAfter(alarmData.nextDateTime!)){
+          await commonShowOkInfoDialog(context, "Log", "step4");
+          //Alarm起動するときの処理
+
+          AlarmPattern? alarmPattern = await selectIsarAlarmPattern(alarmData.patternId);
+          await refleshAlarmNextDateTimeByPatternId(alarmPattern!.id!);
+          await calcAndWriteNextTimeOnTextFile();
+
+          await commonNavigatorPushSlideHorizon(context, const RingRoot());
+
+        }
+      }
+    }
   }
 
   Widget headerInfo(BuildContext context, WidgetRef ref){

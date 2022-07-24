@@ -34,7 +34,7 @@ Widget commonFunctionPushSlideBottomToTop(BuildContext context, Animation<double
 
 }
 
-Future<void>  commonNavigatorPushPushSlideHorizonReplacement(BuildContext context, Widget  widget)async{
+Future<void>  commonNavigatorPushSlideHorizonReplacement(BuildContext context, Widget  widget)async{
   await Navigator.of(context).pushReplacement(
     PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {

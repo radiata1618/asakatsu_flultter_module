@@ -28,7 +28,6 @@ class Root extends ConsumerWidget {
 
     ref.read(bottomNavigationBarItemsProvider.notifier).initialize(ref);
     final selectedIndex = ref.watch(_selectedIndexProvider);
-    checkRingData(ref,context);
 
     return Scaffold(
       body: routeElement(
@@ -69,25 +68,4 @@ class Root extends ConsumerWidget {
   }
 
 
-  Future<void> checkRingData(WidgetRef ref, BuildContext context)async {
-
-    Alarm? alarmData = await selectIsarAlarmMostRecent();
-
-    if(alarmData!=null){
-      if(alarmData.nextDateTime!=null){
-        if(DateTime.now().isAfter(alarmData.nextDateTime!)){
-          //Alarm起動するときの処理
-
-          AlarmPattern? alarmPattern = await selectIsarAlarmPattern(alarmData.patternId);
-          await refleshAlarmNextDateTimeByPatternId(alarmPattern!.id!);
-          await calcAndWriteNextTimeOnTextFile();
-
-          await commonNavigatorPushSlideHorizon(context, const RingRoot());
-
-        }
-      }
-    }
-
-
-  }
 }

@@ -1,9 +1,13 @@
+import 'package:asakatsu_flultter_module/UIs/walkingForStopRing.dart';
 import 'package:asakatsu_flultter_module/common/UI/commonButtonUI.dart';
+import 'package:asakatsu_flultter_module/common/UI/commonPushUI.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vibration/vibration.dart';
+
+import 'calcForStopRing.dart';
 
 class RingRoot extends ConsumerWidget {
   const RingRoot({
@@ -24,6 +28,14 @@ class RingRoot extends ConsumerWidget {
         Expanded(child: Container(color:Colors.green)),
         commonButtonSecondaryColorRound(text: "Stop ring", onPressed: () {
           stopSoundsAndVibe(player);
+        }),
+        commonButtonSecondaryColorRound(text: "Stop by calc", onPressed: () {
+          stopSoundsAndVibe(player);
+          commonNavigatorPushSlideHorizonReplacement(context, const CalcForStopRing());
+        }),
+        commonButtonSecondaryColorRound(text: "Stop by walking", onPressed: () {
+          stopSoundsAndVibe(player);
+          commonNavigatorPushSlideHorizonReplacement(context, const WakingForStopRing());
         })
       ],
     ));
