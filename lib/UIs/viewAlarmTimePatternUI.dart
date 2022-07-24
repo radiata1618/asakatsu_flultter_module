@@ -26,7 +26,7 @@ class ViewAlarmTimePattern extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    checkRingData(ref,context);
+    // checkRingData(ref,context);
 
     return Scaffold(
       appBar: commonAppTabBar(),
@@ -51,29 +51,29 @@ class ViewAlarmTimePattern extends ConsumerWidget {
     );
   }
 
-  Future<void> checkRingData(WidgetRef ref, BuildContext context)async {
-
-    Alarm? alarmData = await selectIsarAlarmMostRecent();
-
-    await commonShowOkInfoDialog(context, "Log", "NextTime:"+(alarmData==null?"NULL":alarmData!.nextDateTime!.toString()));
-    if(alarmData!=null){
-      await commonShowOkInfoDialog(context, "Log", "step2");
-      if(alarmData.nextDateTime!=null){
-        await commonShowOkInfoDialog(context, "Log", "step3");
-        if(DateTime.now().isAfter(alarmData.nextDateTime!)){
-          await commonShowOkInfoDialog(context, "Log", "step4");
-          //Alarm起動するときの処理
-
-          AlarmPattern? alarmPattern = await selectIsarAlarmPattern(alarmData.patternId);
-          await refleshAlarmNextDateTimeByPatternId(alarmPattern!.id!);
-          await calcAndWriteNextTimeOnTextFile();
-
-          await commonNavigatorPushSlideHorizon(context, const RingRoot());
-
-        }
-      }
-    }
-  }
+  // Future<void> checkRingData(WidgetRef ref, BuildContext context)async {
+  //
+  //   Alarm? alarmData = await selectIsarAlarmMostRecent();
+  //
+  //   // await commonShowOkInfoDialog(context, "Log", "NextTime:"+(alarmData==null?"NULL":alarmData!.nextDateTime!.toString()));
+  //   if(alarmData!=null){
+  //     // await commonShowOkInfoDialog(context, "Log", "step2");
+  //     if(alarmData.nextDateTime!=null){
+  //       // await commonShowOkInfoDialog(context, "Log", "step3");
+  //       if(DateTime.now().isAfter(alarmData.nextDateTime!)){
+  //         // await commonShowOkInfoDialog(context, "Log", "step4");
+  //         //Alarm起動するときの処理
+  //
+  //         AlarmPattern? alarmPattern = await selectIsarAlarmPattern(alarmData.patternId);
+  //         await refleshAlarmNextDateTimeByPatternId(alarmPattern!.id!);
+  //         await calcAndWriteNextTimeOnTextFile();
+  //
+  //         await commonNavigatorPushSlideHorizon(context, const RingRoot());
+  //
+  //       }
+  //     }
+  //   }
+  // }
 
   Widget headerInfo(BuildContext context, WidgetRef ref){
     return FutureBuilder(
